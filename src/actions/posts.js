@@ -47,6 +47,7 @@ export async function createPost(prevSate, formData) {
         throw new Error('Error occurred in uploading data in database')
     }
 
+    // after storing the data into db , it revalidates the path to show the new updated feed page after changes especially on production server
     revalidatePath('/' , 'layout')
 
     // after form submission it'll automatically redirect to /feed
