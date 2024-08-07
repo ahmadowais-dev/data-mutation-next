@@ -47,6 +47,8 @@ export async function createPost(prevSate, formData) {
         throw new Error('Error occurred in uploading data in database')
     }
 
+    revalidatePath('/' , 'layout')
+
     // after form submission it'll automatically redirect to /feed
     redirect('/feed')
 }
