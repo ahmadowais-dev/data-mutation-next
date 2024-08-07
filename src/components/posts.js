@@ -20,7 +20,7 @@ function Post({ post }) {
             </p>
           </div>
           <div>
-            <LikeButton />
+            <LikeButton  />
           </div>
         </header>
         <p>{post.content}</p>
