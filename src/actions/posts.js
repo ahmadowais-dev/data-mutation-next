@@ -1,8 +1,9 @@
 'use server'
 
-import {storePost} from "@/src/lib/posts";
+import {storePost, updatePostLikeStatus} from "@/src/lib/posts";
 import {redirect} from "next/navigation";
 import {uploadImage} from "@/src/lib/cloudinary";
+import {revalidatePath} from "next/cache";
 
 export async function createPost(prevSate, formData) {
     const title = formData.get('title');
@@ -34,18 +35,27 @@ export async function createPost(prevSate, formData) {
         throw new Error('Image Upload failed! Please try again later')
     }
 
-   //  store data to database
-   try{
-       await storePost({
-           imageUrl: imageUrl,
-           title,
-           content,
-           userId: 1
-       })
-   }catch(error){
+    //  store data to database
+    try {
+        await storePost({
+            imageUrl: imageUrl,
+            title,
+            content,
+            userId: 1
+        })
+    } catch (error) {
         throw new Error('Error occurred in uploading data in database')
-   }
+    }
 
     // after form submission it'll automatically redirect to /feed
     redirect('/feed')
+}
+
+
+// For like posts functionality
+export async function togglePostLikeStatus(postId) {
+    await updatePostLikeStatus(postId, 2)
+
+    // whenever user visits the route an updated version is served
+    revalidatePath('/' , 'layout')
 }
