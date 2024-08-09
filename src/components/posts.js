@@ -5,12 +5,27 @@ import LikeButton from './like-icon';
 import {formatDate} from "@/src/lib/format";
 import {togglePostLikeStatus} from "@/src/actions/posts";
 import {useOptimistic} from 'react'
+import Image from "next/image";
+
+function imageLoader (config){
+    const urlStart = config.src.split('upload/')[0]
+    const urlEnd = config.src.split('upload/')[1]
+    const transformations = `w_200,q_${config.quality  }`
+    const newURL = `${urlStart}upload/${transformations}/${urlEnd}`
+    return newURL
+}
 
 function Post({post}) {
     return (
         <article className="post">
             <div className="post-image">
-                <img src={post.image} alt={post.title}/>
+                <Image
+                    src={post.image}
+                    width={200}
+                    height={150}
+                    loader={imageLoader}
+                    quality={50}
+                    alt={post.title}/>
             </div>
             <div className="post-content">
                 <header>
